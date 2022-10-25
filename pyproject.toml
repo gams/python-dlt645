@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "python-dlt645"
+version = "0.1.0"
+description = "A basic DL/T645-2007 communication implementation"
+authors = ["Stefan 'hr' Berder <stefan@measureofquality.com>"]
+license = "MIT"
+readme = "README.rst"
+packages = [{include = "dlt645"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.10.0"
+
+[tool.black]
+target-version = ['py39']
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
