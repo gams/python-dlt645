@@ -1,0 +1,2 @@
+[flake8]
+max-doc-length = 72
