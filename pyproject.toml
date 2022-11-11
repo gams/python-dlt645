@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "python-dlt645"
-version = "0.1.0"
+version = "0.1.1"
 description = "A basic DL/T645-2007 communication implementation"
 authors = ["Stefan 'hr' Berder <stefan@measureofquality.com>"]
 license = "MIT"
