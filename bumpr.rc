@@ -1,0 +1,11 @@
+[bumpr]
+file = dlt645/__meta__.py
+vcs = git
+tests = python -m unittest discover
+files =
+    pyproject.toml
+    docs/conf.py
+
+[bump]
+unsuffix = False
+message = bump version to {version}

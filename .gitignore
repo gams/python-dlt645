@@ -1,0 +1,4 @@
+# packaging build folder
+dist
+# sphinx
+docs/_build
