@@ -22,11 +22,16 @@ Usage:
     frame = dlt645.read_frame(dlt645.iogen(ser))
     station_addr = frame.addr
 
+    # requesting active energy
     frame = dlt645.Frame(station_addr)
     frame.data = "00000000"
     ser.write(frame.dump())
     framedata = dlt645.read_frame(dlt645.iogen(ser))
+    # the data will be the full payload (energy valu and data identification)
     print(framedata.data)
+
+    # shorthand function to directly get the active energy value
+    dlt645.get_active_energy(station_addr, ser)
 
 """
 from .__meta__ import __version__  # noqa: F401
@@ -291,3 +296,30 @@ def dump_data(data):
     bdata = bytearray([int(data[i : i + 2], 16) + 0x33 for i in range(0, len(data), 2)])
     bdata.reverse()
     return bdata
+
+
+def get_active_energy(addr, flo, r_flo=None):
+    """Utility function to directly read active energy field, returns the
+    energy value in kWh.
+
+    A file-like object is required for the communication, if 'r_flo' is
+    ``None`` then 'flo' will be used for both read and write. This is useful
+    when using a ``socketserver.StreamRequestHandler`` that provides different
+    file-like objects for read and write.
+
+    :param str addr: a station address
+    :param flo: a file-like object instance for write
+    :param r_flo: a file-like object instance for read
+    """
+    if r_flo is None:
+        r_flo = flo
+
+    frame = Frame(addr)
+    # Data identification for active energy
+    frame.data = "00000000"
+    write_frame(flo, frame)
+
+    resp = read_frame(iogen(r_flo))
+    # test the data identification
+    if resp.data[-8:] == "00000000":
+        return int(resp.data[:-8]) / 100
