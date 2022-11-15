@@ -24,7 +24,8 @@ Usage:
 
     frame = dlt645.Frame(station_addr)
     frame.data = "00000000"
-    framedata = dlt645.read_frame(serialgen(ser))
+    ser.write(frame.dump())
+    framedata = dlt645.read_frame(dlt645.iogen(ser))
     print(framedata.data)
 
 """
@@ -80,16 +81,19 @@ def read_frame(readgen):
             return frame
 
 
-def write_frame(frame, awaken=True):
+def write_frame(flo, frame, awaken=True):
     """Write a frame to byte form to be written on a data line
 
+    :param flo: a file-like object instance
     :param dlt645.Frame frame: a :class:`Frame` instance
     :param bool awaken: whether to prefix the message with wake up bytes
     """
     if awaken is True:
-        return 4 * b_awaken + frame.dump()
+        payload = 4 * b_awaken + frame.dump()
     else:
-        return frame.dump()
+        payload = frame.dump()
+
+    flo.write(payload)
 
 
 class Frame:
