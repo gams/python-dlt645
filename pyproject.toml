@@ -6,6 +6,9 @@ authors = ["Stefan 'hr' Berder <stefan@measureofquality.com>"]
 license = "MIT"
 readme = "README.rst"
 packages = [{include = "dlt645"}]
+homepage = "https://github.com/gams/python-dlt645"
+repository = "https://github.com/gams/python-dlt645"
+documentation = "https://python-dlt645.readthedocs.io/en/latest/"
 
 [tool.poetry.dependencies]
 python = "^3.9"
