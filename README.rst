@@ -22,3 +22,12 @@ Tests pre commit
 
     $ black --diff dlt645/
     $ flake8 dlt645/
+
+Documentation
+=============
+
+Build the documentation:
+
+.. code-block:: shell
+
+    $ make docs
