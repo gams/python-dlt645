@@ -18,7 +18,8 @@ pyserial = {version = "^3.5", optional = true}
 cli = ["pyserial"]
 
 [tool.poetry.scripts]
-dlt645_getaddr = { callable = "dlt645.cli:getaddr", extras = ["cli"] }
+dlt645_addr = { callable = "dlt645.cli:getaddr", extras = ["cli"] }
+dlt645_aen = { callable = "dlt645.cli:getaen", extras = ["cli"] }
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.10.0"
