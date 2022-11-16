@@ -5,6 +5,21 @@ python-dlt645 - A basic DL/T645-2007 communication implementation
 An incomplete implementation of the DL/T645 protocol designed to communicate
 with energy meters through an infrared interface.
 
+Getting started
+===============
+
+To isntall the DL/T645 package only:
+
+.. code-block:: shell
+
+    $ pip install python-dlt645
+
+To install the package with the utility CLI commands:
+
+.. code-block:: shell
+
+    $ pip install python-dlt645[cli]
+
 Development
 ===========
 

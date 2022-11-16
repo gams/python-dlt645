@@ -4,10 +4,10 @@
    contain the root `toctree` directive.
 
 .. include:: ../README.rst
-   :end-line: 7
+   :end-line: 22
 
-python-dlt645
-=============
+Library API
+===========
 
 .. toctree::
    :maxdepth: 1
@@ -16,6 +16,7 @@ python-dlt645
    dlt645/index
    dlt645/constants
    dlt645/exceptions
+   dlt645/cli
 
 
 

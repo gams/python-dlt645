@@ -17,10 +17,7 @@ Usage:
         timeout=1
     )
 
-    ser.write(dlt645.get_addr())
-
-    frame = dlt645.read_frame(dlt645.iogen(ser))
-    station_addr = frame.addr
+    station_addr = dlt645.get_addr(ser)
 
     # requesting active energy
     frame = dlt645.Frame(station_addr)
@@ -196,11 +193,6 @@ class Frame:
         return self.checksum == cs
 
 
-def get_addr():
-    """Return a byte-like payload to request an address from an unknown station"""
-    return b"\xfe\xfe\xfe\xfe\x68\xaa\xaa\xaa\xaa\xaa\xaa\x68\x13\x00\xdf\x16"
-
-
 def checksum(data):
     """Return the checksum of a byte-like object
 
@@ -296,6 +288,23 @@ def dump_data(data):
     bdata = bytearray([int(data[i : i + 2], 16) + 0x33 for i in range(0, len(data), 2)])
     bdata.reverse()
     return bdata
+
+
+def get_addr(flo, r_flo=None):
+    """Utility function to read a station's address, returns the address.
+
+    :param flo: a file-like object instance for write
+    :param r_flo: a file-like object instance for read
+    """
+    if r_flo is None:
+        r_flo = flo
+
+    # request address using broadcast target address
+    payload = b"\xfe\xfe\xfe\xfe\x68\xaa\xaa\xaa\xaa\xaa\xaa\x68\x13\x00\xdf\x16"
+    flo.write(payload)
+
+    resp = read_frame(iogen(r_flo))
+    return resp.addr
 
 
 def get_active_energy(addr, flo, r_flo=None):

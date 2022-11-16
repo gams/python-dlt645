@@ -12,6 +12,13 @@ documentation = "https://python-dlt645.readthedocs.io/en/latest/"
 
 [tool.poetry.dependencies]
 python = "^3.9"
+pyserial = {version = "^3.5", optional = true}
+
+[tool.poetry.extras]
+cli = ["pyserial"]
+
+[tool.poetry.scripts]
+dlt645_getaddr = { callable = "dlt645.cli:getaddr", extras = ["cli"] }
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.10.0"
