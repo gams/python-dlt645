@@ -99,10 +99,10 @@ def getaen():
     .. code-block:: shell
 
         $ dlt645_getaen
+        Station address: 000022076396
         Active energy: 259.7 kWh
     """
     description = "Get station's active energy through serial port"
-    description = "Get station's DL/T645 address through serial port"
     parser = argparse.ArgumentParser(description=description)
     ser_args(parser)
     parser.add_argument(
