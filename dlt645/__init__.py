@@ -65,19 +65,62 @@ def iogen(flo):
 def read_frame(readgen):
     """Read a frame from a data generator, return a :class:`Frame` instance.
 
+    Uses an internal state machine for parsing packet:
+      0. idle, looking for awaken byte
+      1. awaken received, looking for 1st 0x68 (``b_start``)
+      2. 1st 0x68 received, looking for 2nd 0x68
+      3. 2nd 0x68 byte received, next byte is ``ctl_code``
+      4. ``ctl_code`` received, next byte is ``length``
+      5. ``length`` byte received, set counter to find ``CS``
+      6. ``CS`` byte received, waiting for ``b_end``
+      7. ``b_end`` received
+
+    State transition should be 0->(1)->2->3. State 1 is optional when the
+    client does not send ``b_awaken`` byte and sends ``b_start`` byte directly.
+
     :param generator readgen: a generator returning data one byte at a time
     """
     framedata = bytearray()
+
+    state = 0
     for byte in readgen:
         if byte == b"":
             raise ReadTimeoutError
 
-        if byte == b_awaken:
-            continue
+        # state transitions
+        if state == 0:
+            if byte == b_awaken:
+                state = 1
+            elif byte == b_start:
+                state = 2
+        elif state == 1:
+            if byte == b_start:
+                state = 2
+        elif state == 2:
+            if byte == b_start:
+                state = 3
+        elif state == 3:
+            # recv control code, no processing
+            state = 4
+        elif state == 4:
+            # recv length byte
+            counter = byte[0]
+            state = 5
+        elif state == 5:
+            # recv data payload
+            counter -= 1
+            if counter < 0:
+                # data payload passed, checksum received
+                state = 6
+        elif state == 6:
+            # ``b_end`` received
+            state = 7
 
-        framedata.extend(bytearray(byte))
+        # state actions
+        if state in [2, 3, 4, 5, 6, 7]:
+            framedata.extend(bytearray(byte))
 
-        if byte == b_end:
+        if state == 7:
             frame = Frame()
             frame.load(framedata)
             return frame
